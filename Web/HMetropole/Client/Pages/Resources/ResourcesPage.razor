@@ -13,7 +13,7 @@
 @inject ISyncLocalStorageService LocalStorage
 @inject NavigationManager Router
 
-<h3>Forum</h3>
+<h3>Resources</h3>
 
 @if (Step == Step.Step1)
 {
@@ -40,28 +40,15 @@ else if (Step == Step.Step2)
         <hr/>
     }
 
-    if (Result != null)
+    if (Display != null)
     {
-        foreach (ForumThread t in Result.Threads)
-        {
-            <div class="question">
-                <div class="decal">
-                    <h5>@Result.Users.First(i => i.Id == t.User).Name</h5>
-                    @((MarkupString) t.GetMarkup())
-                </div>
-            </div>
-            
-            @foreach (ThreadResponse r in t.Responses)
+        <ul>
+            @foreach (Resource t in Display)
             {
-                <div class="reponse @(r.Validated ? "valide" : "")">
-                    <div class="decal-reponse">
-                        <h5>@Result.Users.First(i => i.Id == r.User).Name</h5>
-                        @r.Content
-                    </div>
-                </div>
-                
+                <li><a href="@t.URL" target="_blank">@t.Name</a></li>
             }
-        }
+        </ul>
+        
     }
 }
 
@@ -71,7 +58,8 @@ else if (Step == Step.Step2)
 {
     private ForumConfigResult Infos;
 
-    private ForumThreadResult? Result;
+    private IEnumerable<Resource> Result;
+    private IEnumerable<Resource>? Display;
 
     private int SelectedTheme;
 
@@ -81,6 +69,7 @@ else if (Step == Step.Step2)
     {
         string user = LocalStorage.GetItem<string>("user");
         Infos = await Client.GetFromJsonAsync<ForumConfigResult>($"api/Forum/");
+        Result = await Client.GetFromJsonAsync<IEnumerable<Resource>>("api/Resource");
 
         Step = Step.Step2;
 
@@ -95,6 +84,7 @@ else if (Step == Step.Step2)
 
     private async Task LoadThreads(int id)
     {
-        Result = await Client.GetFromJsonAsync<ForumThreadResult>($"api/Forum/{id}");
+        Display = Result.Where(i => i.SousTheme == id);
+        StateHasChanged();
     }
 }
