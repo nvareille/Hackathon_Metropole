@@ -15,10 +15,10 @@ namespace Database
 
         public int Id { get; set; }
         public string Type { get; set; } = null!;
-        public int Siret { get; set; }
+        public string Siret { get; set; } = null!;
         public string Nom { get; set; } = null!;
         public string Adresse { get; set; } = null!;
-        public int Cp { get; set; }
+        public string Cp { get; set; } = null!;
         public string Ville { get; set; } = null!;
         public string Taille { get; set; } = null!;
         public string Activité { get; set; } = null!;

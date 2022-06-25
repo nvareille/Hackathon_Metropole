@@ -11,6 +11,7 @@ namespace Database
             Threads = new HashSet<Thread>();
         }
 
+        public int Id { get; set; }
         public string Pseudo { get; set; } = null!;
         public string Nom { get; set; } = null!;
         public string Prenom { get; set; } = null!;

@@ -12,7 +12,7 @@ namespace Database
 
         public int Id { get; set; }
         public int Soustheme { get; set; }
-        public string Utilisateur { get; set; } = null!;
+        public int Utilisateur { get; set; }
         public string Question { get; set; } = null!;
         public bool Clos { get; set; }
 

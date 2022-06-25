@@ -7,7 +7,7 @@ namespace Database
     {
         public int Id { get; set; }
         public int Thread { get; set; }
-        public string Utilisateur { get; set; } = null!;
+        public int Utilisateur { get; set; }
         public string Reponse1 { get; set; } = null!;
         public bool Valide { get; set; }
         public bool MisEnAvant { get; set; }

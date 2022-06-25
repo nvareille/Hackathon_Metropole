@@ -30,8 +30,11 @@ namespace Database
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#if DEBUG
                 optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
+#else
+                optionsBuilder.UseMySql("server=localhost;port=3307;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
+#endif
             }
         }
 
@@ -49,7 +52,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Activité).HasMaxLength(255);
@@ -59,7 +61,7 @@ namespace Database
                 entity.Property(e => e.Bio).HasMaxLength(255);
 
                 entity.Property(e => e.Cp)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("text")
                     .HasColumnName("CP");
 
                 entity.Property(e => e.Logo).HasColumnType("blob");
@@ -67,7 +69,7 @@ namespace Database
                 entity.Property(e => e.Nom).HasColumnType("text");
 
                 entity.Property(e => e.Siret)
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(14)
                     .HasColumnName("SIRET");
 
                 entity.Property(e => e.Taille).HasMaxLength(255);
@@ -86,7 +88,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Nom)
@@ -107,7 +108,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Entreprise1).HasColumnType("int(11)");
@@ -150,7 +150,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Description).HasMaxLength(9999);
@@ -179,7 +178,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.MisEnAvant).HasColumnName("mis en avant");
@@ -192,7 +190,9 @@ namespace Database
                     .HasColumnType("int(11)")
                     .HasColumnName("thread");
 
-                entity.Property(e => e.Utilisateur).HasColumnName("utilisateur");
+                entity.Property(e => e.Utilisateur)
+                    .HasColumnType("int(255)")
+                    .HasColumnName("utilisateur");
 
                 entity.Property(e => e.Valide).HasColumnName("valide");
 
@@ -220,7 +220,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Nom).HasMaxLength(255);
@@ -243,7 +242,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Nom).HasMaxLength(255);
@@ -262,7 +260,6 @@ namespace Database
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Question)
@@ -273,26 +270,25 @@ namespace Database
                     .HasColumnType("int(11)")
                     .HasColumnName("soustheme");
 
-                entity.Property(e => e.Utilisateur).HasColumnName("utilisateur");
+                entity.Property(e => e.Utilisateur)
+                    .HasColumnType("int(255)")
+                    .HasColumnName("utilisateur");
 
                 entity.HasOne(d => d.SousthemeNavigation)
                     .WithMany(p => p.Threads)
                     .HasForeignKey(d => d.Soustheme)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("thread_ibfk_1");
+                    .HasConstraintName("thread_ibfk_2");
 
                 entity.HasOne(d => d.UtilisateurNavigation)
                     .WithMany(p => p.Threads)
                     .HasForeignKey(d => d.Utilisateur)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("thread_ibfk_2");
+                    .HasConstraintName("thread_ibfk_1");
             });
 
             modelBuilder.Entity<Utilisateur>(entity =>
             {
-                entity.HasKey(e => e.Pseudo)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("utilisateurs");
 
                 entity.HasCharSet("utf8")
@@ -301,6 +297,10 @@ namespace Database
                 entity.HasIndex(e => e.Entreprise, "Entreprise");
 
                 entity.HasIndex(e => e.Fonction, "Fonction");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(255)")
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.AdresseEmail)
                     .HasColumnType("text")
@@ -321,6 +321,10 @@ namespace Database
                     .HasColumnName("Numero tel");
 
                 entity.Property(e => e.Prenom).HasColumnType("text");
+
+                entity.Property(e => e.Pseudo)
+                    .HasMaxLength(255)
+                    .HasColumnName("pseudo");
 
                 entity.Property(e => e.Visites).HasColumnName("visites");
 
