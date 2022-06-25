@@ -5,20 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js"></script>
     <title>Document</title>
 </head>
 <body>
     <div class="section">
         <div class="wrapper">
-            <form action="forum.html" method="post">
+            <form onsubmit="return sendData()" method="post" id="form">
     
                 <div class="input"> 
-                    <label for="Nom">Nom utilisateur</label> 
-                <input type="text" class="" id="Nom"
-                    name="username">    
+                    <label for="Username">Nom utilisateur</label> 
+                <input type="text" class="" id="Username"
+                    name="Username">    
                 </div>
 
-                <div class="input">
+                <!-- <div class="input">
                 <label for="pet-select">type d'organisation</label>
 
                 <select name="pets" id="pet-select">
@@ -28,12 +29,12 @@
                     <option value="hamster">ONG</option>
                     <option value="parrot">Métropole de Rouen</option>
                 </select>
-                </div>
+                </div> -->
 
-                <div class="input">
+                <!-- <div class="input">
                     <label for="file">logo entreprise</label>
                     <input type="file" name="file">
-                </div>
+                </div> -->
         
                 <div class="input"> 
                     <label for="Siret">n° siret</label> 
@@ -41,7 +42,7 @@
                     name="Siret">    
                 </div>
         
-                <fieldset>
+                <!-- <fieldset>
                     <legend>comment me contacter :</legend>
                 
                     <div class="input">
@@ -59,26 +60,24 @@
                       <input type="checkbox" id="louie" name="drone" value="louie">
                       <label class="label" for="louie">rendez-vous presentiel</label>
                     </div>
-                </fieldset>
+                </fieldset> -->
             
                 
             
                 <div class="input"> 
-                    <label for="cpassword">MDP</label> 
+                    <label for="Password">MDP</label> 
                     <input type="password" class="form-control"
-                        id="cpassword" name="cpassword">
+                        id="Password" name="Password">
          
                 </div>
-                <div class="input"> 
+                <!-- <div class="input"> 
                     <label for="cpassword">MDP confirm</label> 
                     <input type="password" class="form-control"
                         id="cpassword" name="cpassword">
          
-                </div>        
+                </div>         -->
             
-                <button type="submit" class="btn">
-                Inscription
-                </button> 
+                <input class="btn" type="submit" value="Inscription"/>
             </form> 
         </div>
     </div>
