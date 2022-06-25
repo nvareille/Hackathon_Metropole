@@ -1,0 +1,27 @@
+﻿.question {
+    background-color: lightblue;
+    border-radius: 10px;
+}
+
+.reponse {
+    background-color: #eeeeee;
+    border-radius: 10px;
+    margin-left: 5%;
+    margin-top: 1%;
+}
+
+.valide {
+    background-color: #37ed89;
+}
+
+.decal {
+    margin-left: 10%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.decal-reponse {
+    margin-left: 10%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}

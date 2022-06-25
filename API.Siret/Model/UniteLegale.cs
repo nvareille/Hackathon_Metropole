@@ -25,7 +25,7 @@ namespace API.Siret.Model
 
         public string GetCode()
         {
-            return (ActivitePrincipaleUniteLegale?.Replace("Z", "") ?? throw new Exception());
+            return (ActivitePrincipaleUniteLegale?.Substring(0, ActivitePrincipaleUniteLegale.Length - 1) ?? throw new Exception());
         }
     }
 }
