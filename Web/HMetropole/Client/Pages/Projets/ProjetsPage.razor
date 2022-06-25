@@ -48,6 +48,8 @@ else if (Step == Step.Step2)
             <div class="question">
                 <div class="decal">
                     <h5>@Result.Entreprises.First(i => i.Id == p.Entreprise).Name - @p.Name</h5>
+                    <h5>Prestataire: @Result.Prestataires.First(i => i.Id == p.Prestataire).Name</h5>
+                    <hr/>
                     @((MarkupString) p.GetMarkup())
                 </div>
             </div>

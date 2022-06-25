@@ -11,5 +11,6 @@ namespace HMetropole.Shared.Results
     {
         public IEnumerable<Projet> Projets { get; set; }
         public IEnumerable<Entreprise> Entreprises { get; set; }
+        public IEnumerable<Prestataire> Prestataires { get; set; }
     }
 }

@@ -8,6 +8,7 @@ public class Projet
     public string Content { get; set; }
     public int Theme { get; set; }
     public int SousTheme { get; set; }
+    public int Prestataire { get; set; }
 
     public string GetMarkup()
     {
