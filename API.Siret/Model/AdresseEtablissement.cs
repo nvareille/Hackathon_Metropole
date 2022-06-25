@@ -8,7 +8,7 @@ namespace API.Siret.Model
 {
     public class AdresseEtablissement
     {
-        public int NumeroVoieEtablissement { get; set; }
+        public int? NumeroVoieEtablissement { get; set; }
         public string? TypeVoieEtablissement { get; set; } 
         public string? LibelleVoieEtablissement { get; set; }
         public string? CodePostalEtablissement { get; set; }

@@ -13,6 +13,7 @@ namespace API.Siret.Model
         public UniteLegale UniteLegale { get; set; } = null!;
 
         public AdresseEtablissement AdresseEtablissement { get; set; } = null!;
+        public Activite Activite { get; set; } = null!;
 
         public string GetName()
         {
