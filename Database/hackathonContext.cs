@@ -19,8 +19,10 @@ namespace Database
         public virtual DbSet<Entreprise> Entreprises { get; set; } = null!;
         public virtual DbSet<Fonction> Fonctions { get; set; } = null!;
         public virtual DbSet<Match> Matches { get; set; } = null!;
+        public virtual DbSet<Prestataire> Prestataires { get; set; } = null!;
         public virtual DbSet<Projet> Projets { get; set; } = null!;
         public virtual DbSet<Reponse> Reponses { get; set; } = null!;
+        public virtual DbSet<Ressource> Ressources { get; set; } = null!;
         public virtual DbSet<Soustheme> Sousthemes { get; set; } = null!;
         public virtual DbSet<Theme> Themes { get; set; } = null!;
         public virtual DbSet<Thread> Threads { get; set; } = null!;
@@ -34,7 +36,7 @@ namespace Database
                 optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
 #else
                 optionsBuilder.UseMySql("server=localhost;port=3307;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
-#endif
+#endif            
             }
         }
 
@@ -139,6 +141,38 @@ namespace Database
                     .HasConstraintName("match_ibfk_2");
             });
 
+            modelBuilder.Entity<Prestataire>(entity =>
+            {
+                entity.ToTable("prestataire");
+
+                entity.HasCharSet("utf8")
+                    .UseCollation("utf8_general_ci");
+
+                entity.HasIndex(e => e.Theme, "theme");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Bio)
+                    .HasColumnType("text")
+                    .HasColumnName("bio");
+
+                entity.Property(e => e.Nom)
+                    .HasColumnType("text")
+                    .HasColumnName("nom");
+
+                entity.Property(e => e.Theme)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("theme");
+
+                entity.HasOne(d => d.ThemeNavigation)
+                    .WithMany(p => p.Prestataires)
+                    .HasForeignKey(d => d.Theme)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("prestataire_ibfk_1");
+            });
+
             modelBuilder.Entity<Projet>(entity =>
             {
                 entity.ToTable("projet");
@@ -147,6 +181,10 @@ namespace Database
                     .UseCollation("utf8_general_ci");
 
                 entity.HasIndex(e => e.Entreprise, "Entreprise");
+
+                entity.HasIndex(e => e.Prestataire, "prestataire");
+
+                entity.HasIndex(e => e.Soustheme, "soustheme");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
@@ -158,11 +196,31 @@ namespace Database
 
                 entity.Property(e => e.Nom).HasMaxLength(255);
 
+                entity.Property(e => e.Prestataire)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prestataire");
+
+                entity.Property(e => e.Soustheme)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("soustheme");
+
                 entity.HasOne(d => d.EntrepriseNavigation)
                     .WithMany(p => p.Projets)
                     .HasForeignKey(d => d.Entreprise)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("projet_ibfk_1");
+
+                entity.HasOne(d => d.PrestataireNavigation)
+                    .WithMany(p => p.Projets)
+                    .HasForeignKey(d => d.Prestataire)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("projet_ibfk_2");
+
+                entity.HasOne(d => d.SousthemeNavigation)
+                    .WithMany(p => p.Projets)
+                    .HasForeignKey(d => d.Soustheme)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("projet_ibfk_3");
             });
 
             modelBuilder.Entity<Reponse>(entity =>
@@ -207,6 +265,32 @@ namespace Database
                     .HasForeignKey(d => d.Utilisateur)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("reponse_ibfk_2");
+            });
+
+            modelBuilder.Entity<Ressource>(entity =>
+            {
+                entity.ToTable("ressources");
+
+                entity.HasCharSet("utf8")
+                    .UseCollation("utf8_general_ci");
+
+                entity.HasIndex(e => e.Soustheme, "Soustheme");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Nom).HasColumnType("text");
+
+                entity.Property(e => e.Soustheme).HasColumnType("int(11)");
+
+                entity.Property(e => e.Url).HasColumnType("text");
+
+                entity.HasOne(d => d.SousthemeNavigation)
+                    .WithMany(p => p.Ressources)
+                    .HasForeignKey(d => d.Soustheme)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ressources_ibfk_1");
             });
 
             modelBuilder.Entity<Soustheme>(entity =>
@@ -269,6 +353,10 @@ namespace Database
                 entity.Property(e => e.Soustheme)
                     .HasColumnType("int(11)")
                     .HasColumnName("soustheme");
+
+                entity.Property(e => e.Titre)
+                    .HasMaxLength(100)
+                    .HasColumnName("titre");
 
                 entity.Property(e => e.Utilisateur)
                     .HasColumnType("int(255)")

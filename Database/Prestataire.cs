@@ -3,22 +3,19 @@ using System.Collections.Generic;
 
 namespace Database
 {
-    public partial class Soustheme
+    public partial class Prestataire
     {
-        public Soustheme()
+        public Prestataire()
         {
             Projets = new HashSet<Projet>();
-            Ressources = new HashSet<Ressource>();
-            Threads = new HashSet<Thread>();
         }
 
         public int Id { get; set; }
         public string Nom { get; set; } = null!;
         public int Theme { get; set; }
+        public string Bio { get; set; } = null!;
 
         public virtual Theme ThemeNavigation { get; set; } = null!;
         public virtual ICollection<Projet> Projets { get; set; }
-        public virtual ICollection<Ressource> Ressources { get; set; }
-        public virtual ICollection<Thread> Threads { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Database;
 using HMetropole.Shared.Payloads;
 using HMetropole.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
+using Entreprise = Database.Entreprise;
 
 namespace HMetropole.Server.Controllers
 {
