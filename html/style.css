@@ -13,6 +13,18 @@ html {
     font-family: 'Lato', sans-serif;
     background: #020020;
 }
+
+/* typo */
+a {
+    text-decoration: none;
+} 
+
+.title {
+    padding-bottom: calc(var(--global-spacing) * 0.25);
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
 form {
     background: var(--color-background);
     border-radius: var(--globalradius);
@@ -84,10 +96,34 @@ fieldset .label {
 }
 
 .forum-themes {
-    background: #000000;
+    background: #020020b0;
     border-radius: var(--globalradius);
-    padding: calc(var(--global-spacing) * 0.2);
+    padding: calc(var(--global-spacing) * 0.5);
     display: flex;
-    flex-basis: 30%;
-    justify-content: ;
+    flex-basis: 25%;
+    justify-content: center;
+    align-items: center;
+}
+
+.forum-themes svg {
+    height: 25px;
+    fill: white;
+}
+
+.forum-themes p {
+    color: #f2f2f2;
+}
+.forum-theme-inner {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+.forum-base a {
+    box-shadow: 5px 5px 15px 5px #000000;
+    transition: box-shadow 0.3s ease-in-out;
+}
+.forum-base a:hover {
+    box-shadow: 5px 5px 10px 5px #000000;
 }
