@@ -1,4 +1,4 @@
-﻿@page "/projets"
+﻿@page "/resources"
 @using Database
 @using API.Siret.Model
 @using Blazored.LocalStorage
@@ -8,13 +8,12 @@
 @using HMetropole.Shared.Payloads
 @using HMetropole.Shared.Results
 @using Theme = HMetropole.Shared.Models.Theme
-@using Projet = HMetropole.Shared.Models.Projet
 
 @inject HttpClient Client
 @inject ISyncLocalStorageService LocalStorage
 @inject NavigationManager Router
 
-<h3>Projets</h3>
+<h3>Forum</h3>
 
 @if (Step == Step.Step1)
 {
@@ -41,18 +40,27 @@ else if (Step == Step.Step2)
         <hr/>
     }
 
-    if (Display != null)
+    if (Result != null)
     {
-        foreach (Projet p in Display)
+        foreach (ForumThread t in Result.Threads)
         {
             <div class="question">
                 <div class="decal">
-                    <h5><a href="/entreprise/@p.Entreprise">@Result.Entreprises.First(i => i.Id == p.Entreprise).Name</a> - @p.Name</h5>
-                    <h5>Prestataire: @Result.Prestataires.First(i => i.Id == p.Prestataire).Name</h5>
-                    <hr/>
-                    @((MarkupString) p.GetMarkup())
+                    <h5>@Result.Users.First(i => i.Id == t.User).Name</h5>
+                    @((MarkupString) t.GetMarkup())
                 </div>
             </div>
+            
+            @foreach (ThreadResponse r in t.Responses)
+            {
+                <div class="reponse @(r.Validated ? "valide" : "")">
+                    <div class="decal-reponse">
+                        <h5>@Result.Users.First(i => i.Id == r.User).Name</h5>
+                        @r.Content
+                    </div>
+                </div>
+                
+            }
         }
     }
 }
@@ -63,8 +71,7 @@ else if (Step == Step.Step2)
 {
     private ForumConfigResult Infos;
 
-    private ProjetResult Result;
-    private IEnumerable<Projet>? Display;
+    private ForumThreadResult? Result;
 
     private int SelectedTheme;
 
@@ -74,7 +81,6 @@ else if (Step == Step.Step2)
     {
         string user = LocalStorage.GetItem<string>("user");
         Infos = await Client.GetFromJsonAsync<ForumConfigResult>($"api/Forum/");
-        Result = await Client.GetFromJsonAsync<ProjetResult>($"api/Projet/");
 
         Step = Step.Step2;
 
@@ -84,15 +90,11 @@ else if (Step == Step.Step2)
     private void DisplaySousThemes(int id)
     {
         SelectedTheme = id;
-
-
         StateHasChanged();
     }
 
-    private void LoadThreads(int id)
+    private async Task LoadThreads(int id)
     {
-        Display = Result.Projets.Where(i => i.SousTheme == id);
-        Console.WriteLine(id);
-        StateHasChanged();
+        Result = await Client.GetFromJsonAsync<ForumThreadResult>($"api/Forum/{id}");
     }
 }

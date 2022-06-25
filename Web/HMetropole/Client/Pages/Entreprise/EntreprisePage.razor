@@ -1,0 +1,84 @@
+﻿@page "/entreprise/{Id:int}"
+@using Database
+@using API.Siret.Model
+@using Blazored.LocalStorage
+@using HMetropole.Client.Logic
+@using HMetropole.Shared
+@using HMetropole.Shared.Models
+@using HMetropole.Shared.Payloads
+@using HMetropole.Shared.Results
+@using Theme = HMetropole.Shared.Models.Theme
+@using Projet = HMetropole.Shared.Models.Projet
+@using Entreprise = HMetropole.Shared.Results.Entreprise
+
+@inject HttpClient Client
+@inject ISyncLocalStorageService LocalStorage
+@inject NavigationManager Router
+
+<h3>Entreprise</h3>
+
+@if (Step == Step.Step1)
+{
+    <Loader/>
+}
+else if (Step == Step.Step2)
+{
+    <div class="d-flex">
+        <div class="w-25 text-center">
+            <img src="@Entreprise.Logo"/>
+        </div>
+        <div class="w-75">
+            <div>
+                <h1>@Entreprise.Name</h1>
+                @((MarkupString) Entreprise.GetMarkup())
+            </div>
+            <div>
+                <h1>Comment nous contacter ?</h1>
+                <ul>
+                    <li><b>Téléphone:</b> 02 35 55 66 77</li>
+                    <li><b>Mail:</b> entreprise@entreprise.fr</li>
+                </ul>
+                <button class="btn btn-success">Matcher avec l'entrerpise !</button>
+            </div>
+        </div>
+        
+    </div>
+    <hr/>
+    <div class="d-flex m-5">
+        <div class="w-25">
+            <b>Activité</b>
+            <p>@Entreprise.Activité</p>
+        </div>
+        <div class="w-25">
+            <b>Nom du dirigeant</b>
+            <p>John Doe</p>
+        </div>
+        <div class="w-25">
+            <b>Adresse</b>
+            <p>@Entreprise.Adresse</p>
+        </div>
+    </div>
+    
+}
+
+
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+    private Entreprise Entreprise;
+
+    private Step Step = Step.Step1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string user = LocalStorage.GetItem<string>("user");
+
+        Entreprise = await Client.GetFromJsonAsync<Entreprise>($"api/Entreprise/{Id}");
+        
+        Step = Step.Step2;
+
+        await base.OnInitializedAsync();
+    }
+}
