@@ -1,0 +1,100 @@
+﻿@page "/forum"
+@using Database
+@using API.Siret.Model
+@using Blazored.LocalStorage
+@using HMetropole.Client.Logic
+@using HMetropole.Shared
+@using HMetropole.Shared.Models
+@using HMetropole.Shared.Payloads
+@using HMetropole.Shared.Results
+@using Theme = HMetropole.Shared.Models.Theme
+
+@inject HttpClient Client
+@inject ISyncLocalStorageService LocalStorage
+@inject NavigationManager Router
+
+<h3>Forum</h3>
+
+@if (Step == Step.Step1)
+{
+    <Loader/>
+}
+else if (Step == Step.Step2)
+{
+    foreach (Theme theme in Infos.Themes)
+    {
+        int id = theme.Id;
+
+        <button class="btn btn-primary m-1" @onclick="() => DisplaySousThemes(id)">@theme.Name</button>
+    }
+    <hr/>
+
+    if (SelectedTheme != 0)
+    {
+        foreach (SubTheme stheme in Infos.Themes.First(i => i.Id == SelectedTheme).SubThemes)
+        {
+            int id = stheme.Id;
+
+            <button class="btn btn-primary m-1" @onclick="() => LoadThreads(id)">@stheme.Name</button>
+        }
+        <hr/>
+    }
+
+    if (Result != null)
+    {
+        foreach (ForumThread t in Result.Threads)
+        {
+            <div class="question">
+                <div class="decal">
+                    <h5>@Result.Users.First(i => i.Id == t.User).Name</h5>
+                    @((MarkupString) t.GetMarkup())
+                </div>
+            </div>
+            
+            @foreach (ThreadResponse r in t.Responses)
+            {
+                <div class="reponse @(r.Validated ? "valide" : "")">
+                    <div class="decal-reponse">
+                        <h5>@Result.Users.First(i => i.Id == r.User).Name</h5>
+                        @r.Content
+                    </div>
+                </div>
+                
+            }
+        }
+    }
+}
+
+
+
+@code
+{
+    private ForumConfigResult Infos;
+
+    private ForumThreadResult? Result;
+
+    private int SelectedTheme;
+
+    private Step Step;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string user = LocalStorage.GetItem<string>("user");
+        Infos = await Client.GetFromJsonAsync<ForumConfigResult>($"api/Forum/");
+
+        Step = Step.Step2;
+
+        await base.OnInitializedAsync();
+    }
+
+    private void DisplaySousThemes(int id)
+    {
+        SelectedTheme = id;
+        StateHasChanged();
+    }
+
+    private async Task LoadThreads(int id)
+    {
+        Result = await Client.GetFromJsonAsync<ForumThreadResult>($"api/Forum/{id}");
+    }
+}

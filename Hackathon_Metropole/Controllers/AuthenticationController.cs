@@ -31,7 +31,7 @@ namespace Hackathon_Metropole.Controllers
                 Siret = payload.Siret,
                 Cp = found.AdresseEtablissement.CodePostalEtablissement,
                 Bio = "",
-                Logo = new byte[0],
+                Logo = "",
                 Taille = "",
                 Type = "",
                 Ville = found.AdresseEtablissement.LibelleCommuneEtablissement

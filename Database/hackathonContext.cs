@@ -30,11 +30,8 @@ namespace Database
         {
             if (!optionsBuilder.IsConfigured)
             {
-#if DEBUG
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
-#else
-                optionsBuilder.UseMySql("server=localhost;port=3307;user=root;database=hackathon", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.36-mysql"));
-#endif
             }
         }
 
@@ -64,7 +61,7 @@ namespace Database
                     .HasColumnType("text")
                     .HasColumnName("CP");
 
-                entity.Property(e => e.Logo).HasColumnType("blob");
+                entity.Property(e => e.Logo).HasColumnType("text");
 
                 entity.Property(e => e.Nom).HasColumnType("text");
 

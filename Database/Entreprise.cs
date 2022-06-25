@@ -23,7 +23,7 @@ namespace Database
         public string Taille { get; set; } = null!;
         public string Activité { get; set; } = null!;
         public string Bio { get; set; } = null!;
-        public byte[] Logo { get; set; } = null!;
+        public string Logo { get; set; } = null!;
 
         public virtual ICollection<Match> MatchEntreprise1Navigations { get; set; }
         public virtual ICollection<Match> MatchEntreprise2Navigations { get; set; }
