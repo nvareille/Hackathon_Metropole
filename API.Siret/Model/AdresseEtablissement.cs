@@ -13,5 +13,10 @@ namespace API.Siret.Model
         public string? LibelleVoieEtablissement { get; set; }
         public string? CodePostalEtablissement { get; set; }
         public string? LibelleCommuneEtablissement { get; set; }
+
+        public string GetAdresse()
+        {
+            return ($"{NumeroVoieEtablissement} {TypeVoieEtablissement} {LibelleVoieEtablissement} {CodePostalEtablissement} {LibelleCommuneEtablissement}");
+        }
     }
 }
