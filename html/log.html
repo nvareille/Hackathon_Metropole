@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="section">
+        <div class="wrapper">
+            <form action="forum.html" method="post">
+    
+                <div class="input"> 
+                    <label for="Nom">Nom utilisateur</label> 
+                <input type="text" class="" id="Nom"
+                    name="username">    
+                </div>
+
+                <div class="input">
+                <label for="pet-select">type d'organisation</label>
+
+                <select name="pets" id="pet-select">
+                    <option value="">-- type d'organisation--</option>
+                    <option value="dog">Entreprise</option>
+                    <option value="cat">préstataire</option>
+                    <option value="hamster">ONG</option>
+                    <option value="parrot">Métropole de Rouen</option>
+                </select>
+                </div>
+
+                <div class="input">
+                    <label for="file">logo entreprise</label>
+                    <input type="file" name="file">
+                </div>
+        
+                <div class="input"> 
+                    <label for="Siret">n° siret</label> 
+                <input type="text" class="" id="Siret"
+                    name="Siret">    
+                </div>
+        
+                <fieldset>
+                    <legend>comment me contacter :</legend>
+                
+                    <div class="input">
+                      <input type="checkbox" id="huey" name="drone" value="huey"
+                             checked>
+                      <label class="label" for="huey">par téléphone</label>
+                    </div>
+                
+                    <div class="input">
+                      <input type="checkbox" id="dewey" name="drone" value="dewey">
+                      <label class="label" for="dewey">par mail</label>
+                    </div>
+                
+                    <div class="input">
+                      <input type="checkbox" id="louie" name="drone" value="louie">
+                      <label class="label" for="louie">rendez-vous presentiel</label>
+                    </div>
+                </fieldset>
+            
+                
+            
+                <div class="input"> 
+                    <label for="cpassword">MDP</label> 
+                    <input type="password" class="form-control"
+                        id="cpassword" name="cpassword">
+         
+                </div>
+                <div class="input"> 
+                    <label for="cpassword">MDP confirm</label> 
+                    <input type="password" class="form-control"
+                        id="cpassword" name="cpassword">
+         
+                </div>        
+            
+                <button type="submit" class="btn">
+                Inscription
+                </button> 
+            </form> 
+        </div>
+    </div>
+    
+    
+    
+</body>
+</html>
