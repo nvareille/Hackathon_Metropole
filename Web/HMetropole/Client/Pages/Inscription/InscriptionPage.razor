@@ -1,0 +1,103 @@
+﻿@page "/inscription"
+@using Database
+@using API.Siret.Model
+@using Blazored.LocalStorage
+@using HMetropole.Client.Logic
+@using HMetropole.Shared
+@using HMetropole.Shared.Payloads
+
+@inject HttpClient Client
+@inject ISyncLocalStorageService LocalStorage
+
+<h3>Inscription</h3>
+
+@if (Step == Step.Step1)
+{
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Nom d'utilisateur</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" @bind="User">
+    </div>
+    <div class="mb-3">
+        <label for="siret" class="form-label">Siret de l'entreprise</label>
+        <input type="text" class="form-control" id="siret" @onchange="GetSiret">
+    </div>
+
+    @if (SiretLoading)
+    {
+        <Loader/>
+    }
+
+    @if (EntrepriseFound != "")
+    {
+        <h6>@EntrepriseFound</h6>
+    }
+
+    <div class="mb-3">
+        <label for="mdp" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="mdp" @bind="Password">
+    </div>
+
+    <div class="mb-3">
+        <label for="mdp2" class="form-label">Confirmation du Mot de passe</label>
+        <input type="password" class="form-control" id="mdp2">
+    </div>
+
+    <button class="btn btn-success" @onclick="Register">Je rejoins la plateforme</button>
+}
+else if (Step == Step.Step2)
+{
+    <Loader/>
+}
+else if (Step == Step.Step3)
+{
+    <h1>Inscription validée !</h1>
+    <a class="btn btn-success" href="/dashboard">Accéder au Dashboard</a>
+}
+
+
+@code
+{
+    private bool SiretLoading;
+    private string EntrepriseFound = "";
+
+    private string Siret;
+    private string User;
+    private string Password;
+
+    private Step Step;
+
+    private async Task GetSiret(ChangeEventArgs args)
+    {
+        SiretLoading = true;
+
+        try
+        {
+            Etablissement e = await Client.GetFromJsonAsync<Etablissement>($"api/Siret/{args.Value.ToString()}");
+
+            EntrepriseFound = e.GetName();
+            Siret = args.Value.ToString();
+        }
+        catch (Exception e)
+        {
+            EntrepriseFound = "Aucune entreprise trouvée avec ce siret";
+        }
+        
+        SiretLoading = false;
+    }
+
+    private async Task Register()
+    {
+        Step = Step.Step2;
+
+        await Client.PostAsJsonAsync($"api/Authentication", new InscriptionPayload
+        {
+            Siret = Siret,
+            Password = Password,
+            Username = User
+        });
+        
+        LocalStorage.SetItem("user", User);
+
+        Step = Step.Step3;
+    }
+}

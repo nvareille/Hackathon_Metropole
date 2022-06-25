@@ -1,9 +1,10 @@
 ﻿using API.Siret;
 using Database;
 using HMetropole.Shared.Payloads;
+using HMetropole.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hackathon_Metropole.Controllers
+namespace HMetropole.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,7 +20,7 @@ namespace Hackathon_Metropole.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromForm]InscriptionPayload payload)
+        public async Task Post([FromBody]InscriptionPayload payload)
         {
             var found = await Wrapper.GetEntreprise(payload.Siret);
 
@@ -39,6 +40,32 @@ namespace Hackathon_Metropole.Controllers
 
             Context.Entreprises.Add(e);
             Context.SaveChanges();
+
+            Utilisateur u = new Utilisateur
+            {
+                Pseudo = payload.Username,
+                AdresseEmail = "",
+                Nom = "",
+                Prenom = "",
+                NumeroTel = "",
+                Entreprise = e.Id,
+                Fonction = Context.Fonctions.First().Id
+            };
+
+            Context.Utilisateurs.Add(u);
+            Context.SaveChanges();
+        }
+
+        [HttpGet("infos/{user}")]
+        public InfoResult Connexion(string user)
+        {
+            Utilisateur? u = Context.Utilisateurs.First(i => i.Pseudo == user);
+
+            return (new InfoResult()
+            {
+                User = u.Pseudo,
+                Entreprise = Context.Entreprises.First(i => i.Id == u.Entreprise).Nom
+            });
         }
     }
 }

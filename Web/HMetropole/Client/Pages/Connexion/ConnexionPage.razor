@@ -1,0 +1,51 @@
+﻿@page "/connexion"
+@using Database
+@using API.Siret.Model
+@using Blazored.LocalStorage
+@using HMetropole.Client.Logic
+@using HMetropole.Shared
+@using HMetropole.Shared.Payloads
+
+@inject HttpClient Client
+@inject ISyncLocalStorageService LocalStorage
+@inject NavigationManager Router
+
+<h3>Connexion</h3>
+
+@if (Step == Step.Step1)
+{
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Nom d'utilisateur</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" @bind="User">
+    </div>
+
+    <div class="mb-3">
+        <label for="mdp" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="mdp">
+    </div>
+
+    <button class="btn btn-success" @onclick="Connexion">Connexion</button>
+}
+else if (Step == Step.Step2)
+{
+    <Loader/>
+}
+else if (Step == Step.Step3)
+{
+    <h1>Inscription validée !</h1>
+    <button class="btn btn-success">Accéder au Dashboard</button>
+}
+
+
+@code
+{
+    private string User;
+
+    private Step Step;
+
+    private void Connexion()
+    {
+        LocalStorage.SetItem("user", User);
+        Router.NavigateTo("/Dashboard");
+    }
+}
