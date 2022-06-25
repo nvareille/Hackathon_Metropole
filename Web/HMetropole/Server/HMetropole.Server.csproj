@@ -7,16 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API.Siret\API.Siret.csproj" />
-    <ProjectReference Include="..\Database\Database.csproj" />
-    <ProjectReference Include="..\Web\HMetropole\Shared\HMetropole.Shared.csproj" />
+    <ProjectReference Include="..\..\..\API.Siret\API.Siret.csproj" />
+    <ProjectReference Include="..\..\..\Database\Database.csproj" />
+    <ProjectReference Include="..\Client\HMetropole.Client.csproj" />
+    <ProjectReference Include="..\Shared\HMetropole.Shared.csproj" />
   </ItemGroup>
+
 
 </Project>

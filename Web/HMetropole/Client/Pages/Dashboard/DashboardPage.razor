@@ -1,0 +1,43 @@
+﻿@page "/dashboard"
+@using Database
+@using API.Siret.Model
+@using Blazored.LocalStorage
+@using HMetropole.Client.Logic
+@using HMetropole.Shared
+@using HMetropole.Shared.Payloads
+@using HMetropole.Shared.Results
+
+@inject HttpClient Client
+@inject ISyncLocalStorageService LocalStorage
+@inject NavigationManager Router
+
+<h3>Dashboard</h3>
+
+@if (Step == Step.Step1)
+{
+    <Loader/>
+}
+else if (Step == Step.Step2)
+{
+    <h1>Bienvenu @Infos.User</h1>
+    <h6>@Infos.Entreprise</h6>
+}
+
+
+
+@code
+{
+    private InfoResult Infos;
+
+    private Step Step;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string user = LocalStorage.GetItem<string>("user");
+        Infos = await Client.GetFromJsonAsync<InfoResult>($"api/Authentication/infos/{user}");
+
+        Step = Step.Step2;
+
+        await base.OnInitializedAsync();
+    }
+}
