@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : sam. 25 juin 2022 à 00:17
+-- Généré le : sam. 25 juin 2022 à 06:06
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `entreprise`;
 CREATE TABLE IF NOT EXISTS `entreprise` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Type` text NOT NULL,
-  `SIRET` int(11) NOT NULL,
+  `SIRET` varchar(14) NOT NULL,
   `Nom` text NOT NULL,
   `Adresse` varchar(255) NOT NULL,
-  `CP` int(11) NOT NULL,
+  `CP` text NOT NULL,
   `Ville` text NOT NULL,
   `Taille` varchar(255) NOT NULL,
   `Activité` varchar(255) NOT NULL,
@@ -51,10 +51,20 @@ CREATE TABLE IF NOT EXISTS `entreprise` (
 
 DROP TABLE IF EXISTS `fonction`;
 CREATE TABLE IF NOT EXISTS `fonction` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `fonction`
+--
+
+INSERT INTO `fonction` (`id`, `nom`) VALUES
+(1, 'Dirigeant'),
+(2, 'Responsable RSE'),
+(3, 'Responsable énergie'),
+(4, 'Responsable QHSE');
 
 -- --------------------------------------------------------
 
@@ -64,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `fonction` (
 
 DROP TABLE IF EXISTS `match`;
 CREATE TABLE IF NOT EXISTS `match` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Entreprise1` int(11) NOT NULL,
   `Entreprise2` int(11) NOT NULL,
   `Accepte` tinyint(1) NOT NULL,
@@ -85,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `match` (
 
 DROP TABLE IF EXISTS `projet`;
 CREATE TABLE IF NOT EXISTS `projet` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nom` varchar(255) NOT NULL,
   `Description` varchar(9999) NOT NULL,
   `Entreprise` int(11) NOT NULL,
@@ -102,9 +112,9 @@ CREATE TABLE IF NOT EXISTS `projet` (
 
 DROP TABLE IF EXISTS `reponse`;
 CREATE TABLE IF NOT EXISTS `reponse` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `thread` int(11) NOT NULL,
-  `utilisateur` varchar(255) NOT NULL,
+  `utilisateur` int(255) NOT NULL,
   `reponse` text NOT NULL,
   `valide` tinyint(1) NOT NULL,
   `mis en avant` tinyint(1) NOT NULL,
@@ -121,12 +131,26 @@ CREATE TABLE IF NOT EXISTS `reponse` (
 
 DROP TABLE IF EXISTS `soustheme`;
 CREATE TABLE IF NOT EXISTS `soustheme` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nom` varchar(255) NOT NULL,
   `Theme` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Theme` (`Theme`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `soustheme`
+--
+
+INSERT INTO `soustheme` (`id`, `Nom`, `Theme`) VALUES
+(1, 'Rénovation énergétique', 1),
+(2, 'Sobriété énergétique', 2),
+(3, 'Gestion différenciée', 3),
+(4, 'Economie circulaire', 4),
+(5, 'Construction', 1),
+(6, 'Efficacité énergétique', 2),
+(7, 'Ecopaturage', 3),
+(8, 'Gestion des déchets', 4);
 
 -- --------------------------------------------------------
 
@@ -136,10 +160,23 @@ CREATE TABLE IF NOT EXISTS `soustheme` (
 
 DROP TABLE IF EXISTS `theme`;
 CREATE TABLE IF NOT EXISTS `theme` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nom` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `theme`
+--
+
+INSERT INTO `theme` (`ID`, `Nom`) VALUES
+(1, 'Batiment'),
+(2, 'Energie'),
+(3, 'Biodiversité et Gestion des espaces verts'),
+(4, 'Economie circulaire et gestion des déchets'),
+(5, 'Numérique responsable'),
+(6, 'Alimentation durable'),
+(7, 'Mobilité');
 
 -- --------------------------------------------------------
 
@@ -149,9 +186,9 @@ CREATE TABLE IF NOT EXISTS `theme` (
 
 DROP TABLE IF EXISTS `thread`;
 CREATE TABLE IF NOT EXISTS `thread` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `soustheme` int(11) NOT NULL,
-  `utilisateur` varchar(255) NOT NULL,
+  `utilisateur` int(255) NOT NULL,
   `question` text NOT NULL,
   `Clos` tinyint(1) NOT NULL,
   PRIMARY KEY (`ID`),
@@ -167,7 +204,8 @@ CREATE TABLE IF NOT EXISTS `thread` (
 
 DROP TABLE IF EXISTS `utilisateurs`;
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
-  `Pseudo` varchar(255) NOT NULL,
+  `ID` int(255) NOT NULL AUTO_INCREMENT,
+  `pseudo` varchar(255) NOT NULL,
   `Nom` text NOT NULL,
   `Prenom` text NOT NULL,
   `Fonction` int(11) NOT NULL,
@@ -178,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `visites` tinyint(1) NOT NULL,
   `Temoignage` tinyint(1) NOT NULL,
   `Entreprise` int(11) NOT NULL,
-  PRIMARY KEY (`Pseudo`),
+  PRIMARY KEY (`ID`),
   KEY `Entreprise` (`Entreprise`),
   KEY `Fonction` (`Fonction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -205,7 +243,7 @@ ALTER TABLE `projet`
 --
 ALTER TABLE `reponse`
   ADD CONSTRAINT `reponse_ibfk_1` FOREIGN KEY (`thread`) REFERENCES `thread` (`ID`),
-  ADD CONSTRAINT `reponse_ibfk_2` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateurs` (`Pseudo`);
+  ADD CONSTRAINT `reponse_ibfk_2` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateurs` (`ID`);
 
 --
 -- Contraintes pour la table `soustheme`
@@ -217,8 +255,8 @@ ALTER TABLE `soustheme`
 -- Contraintes pour la table `thread`
 --
 ALTER TABLE `thread`
-  ADD CONSTRAINT `thread_ibfk_1` FOREIGN KEY (`soustheme`) REFERENCES `soustheme` (`id`),
-  ADD CONSTRAINT `thread_ibfk_2` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateurs` (`Pseudo`);
+  ADD CONSTRAINT `thread_ibfk_1` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateurs` (`ID`),
+  ADD CONSTRAINT `thread_ibfk_2` FOREIGN KEY (`soustheme`) REFERENCES `soustheme` (`id`);
 
 --
 -- Contraintes pour la table `utilisateurs`
